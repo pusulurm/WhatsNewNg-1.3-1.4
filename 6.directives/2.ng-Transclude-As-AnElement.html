@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Default restriction</title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-route.js"></script>
+
+</head>
+<body ng-app="mainModule">
+<script>
+    angular.module("mainModule",[])
+            .directive('myOldDirective', function(){
+                return{
+                    scope : {},
+                    transclude : true,
+                    template : '<div class="well">This message is from my-old-Directive<div ng-transclude></div></div>'
+                }
+
+            })
+            .directive('myNewDirective', function(){
+                return{
+                    scope : {},
+                    transclude : true,
+                    template : '<div class="well">This message is from my-new-Directive<ng-transclude></ng-transclude></div>'
+                }
+
+            })
+</script>
+<my-old-directive>
+    This is sub content of old directive...!
+</my-old-directive>
+
+<my-new-directive>
+    This is sub content of new directive...!
+</my-new-directive>
+</body>
+</html>

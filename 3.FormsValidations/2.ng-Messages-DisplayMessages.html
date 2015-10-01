@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ng-Message DisplayMessages</title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular-1.3.1.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-messages-1.3.1.js"></script>
+    <script>
+        angular.module("whatsNew",['ngMessages'])
+                .controller('assetsController',['$scope', function($scope){
+                    $scope.assets = [
+                        {
+                            _id : 1,
+                            type : 'Fixed',
+                            name : 'Land',
+                            owner : 'AAAA',
+                            email : 'aa@gmail.com',
+                            Cost : 500000,
+                            location : 'Hyderabad'
+                        },
+                        {
+                            _id : 2,
+                            type : 'Lease',
+                            name : 'House',
+                            owner : 'BBBB',
+                            email : 'bb@gmail.com',
+                            Cost : 8700000,
+                            location : 'Chennai'
+                        },
+                        {
+                            _id : 3,
+                            type : 'Inherited',
+                            name : 'Car',
+                            owner : 'CCCC',
+                            email : 'cc@gmail.com',
+                            Cost : 50000,
+                            location : 'Hyderabad'
+                        }
+                    ];
+                    $scope.currentAsset = {};
+
+                    $scope.saveThisAsset = function(asset){
+                        var id = 1;
+                        if($scope.assets.length > 0)
+                        {
+                            var id =parseInt($scope.assets[$scope.assets.length-1]._id)+1;
+                        }
+                        asset._id = id;
+                        $scope.assets.push(asset)
+                        $scope.clearCurrentAsset();
+                    };
+
+                    $scope.clearCurrentAsset = function(){
+                        $scope.currentAsset = {};
+                    };
+                }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+<div ng-controller="assetsController">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Owner's Mail Id</th>
+                <th>Cost in Rs</th>
+                <th>Location</th>
+                <th>
+                    <button type="button" class="btn btn-info btn-lg"
+                            data-toggle="modal" data-target="#myModal" ng-click="popupMode = 0;">Add Asset</button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="asset in assets">
+                <td><div ng-bind="asset.type"></div> </td>
+                <td><div ng-bind="asset.name"></div> </td>
+                <td><div ng-bind="asset.owner"></div> </td>
+                <td><div ng-bind="asset.email"></div> </td>
+                <td><div ng-bind="asset.Cost"></div> </td>
+                <td><div ng-bind="asset.location"></div> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <form name="frm_AddAsset" ng-submit="saveThisAsset(currentAsset)" novalidate>
+        <div class="modal fade span8" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h3 class="modal-title">Add an Asset</h3>
+                    </div>
+                    <div class="modal-body" ng-class >
+                        <div>
+                            <div class="form-group" ng-class="{'has-error' : frm_AddAsset.assertType.$invalid && frm_AddAsset.assertType.$dirty }">
+                                <div class="span2">Type : </div>
+                                <select class="form-control input-lg" ng-model="currentAsset.type" name="assertType" required>
+                                    <option></option>
+                                    <option>Fixed</option>
+                                    <option>Lease</option>
+                                    <option>Inherited</option>
+                                </select>
+                                <span class="help-block has-error" ng-if="frm_AddAsset.assertType.$dirty" ng-messages="frm_AddAsset.assertType.$error">
+                                    <span ng-message="required">
+                                        Asset type can not be empty..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_AddAsset.assetName.$invalid && frm_AddAsset.assertType.$dirty }">
+                                <span class="span2">Name : </span>
+                                <input class="form-control input-lg" name="assetName" type="text" ng-model="currentAsset.name" required ng-minlength="2" ng-maxlength="15"/>
+                                <span class="help-block has-error" ng-if="frm_AddAsset.assetName.$dirty" ng-messages="frm_AddAsset.assetName.$error">
+                                    <span ng-message="required">
+                                        Asset name can not be empty..!
+                                    </span>
+                                    <span ng-message="minlength">
+                                        Asset name can should be minimum of 2 characters..!
+                                    </span>
+                                    <span ng-message="maxlength">
+                                        Asset name can not be more than 15 characters..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_AddAsset.assetOwner.$invalid && frm_AddAsset.assetOwner.$dirty }">
+                                <span class="span2">Owner : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.owner" required name="assetOwner" ng-minlength="5" ng-maxlength="20"/>
+                                <span class="help-block has-error" ng-if="frm_AddAsset.assetOwner.$dirty" ng-messages="frm_AddAsset.assetOwner.$error">
+                                    <span ng-message="required">
+                                        Asset owner name can not be empty..!
+                                    </span>
+                                    <span ng-message="minlength">
+                                        Asset owner name can should be minimum of 5 characters..!
+                                    </span>
+                                    <span ng-message="maxlength">
+                                        Asset owner name can not be more than 20 characters..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_AddAsset.assetOwnerEmail.$invalid && frm_AddAsset.assetOwnerEmail.$dirty }">
+                                <span class="span2">E-mail : </span>
+                                <input class="form-control input-lg" type="email" ng-model="currentAsset.email" required name="assetOwnerEmail" ng-maxlength="15"/>
+                                <span class="help-block has-error" ng-if="frm_AddAsset.assetOwnerEmail.$dirty" ng-messages="frm_AddAsset.assetOwnerEmail.$error" ng-messages-multiple >
+                                    <span ng-message="required">
+                                        Owner's E-mail can not be empty..!
+                                    </span>
+                                    <span ng-message="email">
+                                        Owner's E-mail should be in valid format..!
+                                    </span>
+                                    <span ng-message="maxlength">
+                                        Owner's E-mail shouldn't be more than 15 characters..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_AddAsset.assetCost.$invalid && frm_AddAsset.assetCost.$dirty }">
+                                <span class="span2">Cost in Rs : </span>
+                                <input class="form-control input-lg" type="number" ng-model="currentAsset.Cost" required name="assetCost" min="100" max="10000000"/>
+                                <span class="help-block has-error" ng-if="frm_AddAsset.assetCost.$dirty" ng-messages="frm_AddAsset.assetCost.$error">
+                                    <span ng-message="required">
+                                        Asset cost can not be empty..!
+                                    </span>
+                                    <span ng-message="min">
+                                        Asset cost can't be less than 100 ..!
+                                    </span>
+                                    <span ng-message="max">
+                                        Asset cost can't be more than one C ..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_AddAsset.assetLocation.$invalid && frm_AddAsset.assetLocation.$dirty }">
+                                <span class="span2">Location : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.location" required name="assetLocation"/>
+                                <span class="help-block has-error" ng-if="frm_AddAsset.assetLocation.$dirty" ng-messages="frm_AddAsset.assetLocation.$error">
+                                    <span ng-message="required">
+                                        Asset location can not be empty..!
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success"/>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearCurrentAsset()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

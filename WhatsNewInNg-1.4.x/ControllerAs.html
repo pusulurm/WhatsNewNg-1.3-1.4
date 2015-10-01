@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Controller As sample</title>
+    <script type="text/javascript" src="../scipts/lib/angular1.2.js"></script>
+    <script>
+        angular.module("TestModule", []).
+                controller("FirstController", function($scope){
+                    $scope.message = "This message is from controller 1";
+                }).
+                controller("SecondController", function($scope){
+                    $scope.message = "This message is from controller 2";
+                }).
+                controller("ThirdController", function(){
+                    this.message = "This message is from controller 3";
+                }).
+                controller("FourthController", function(){
+                    this.message = "This message is from controller 4";
+                })
+    </script>
+</head>
+<body ng-app = "TestModule">
+    <div ng-controller="FirstController">
+        {{message}}
+        <div ng-controller="SecondController">
+            {{$parent.message}}
+        </div>
+    </div>
+<hr/>
+    <div ng-controller="ThirdController as thirdCtrl">
+        {{thirdCtrl.message}}
+        <div ng-controller="FourthController as fourthCtrl">
+            {{thirdCtrl.message}}
+        </div>
+    </div>
+</body>
+</html>

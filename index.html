@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Without HTML5 Routing</title>
+    <script type="text/javascript" src="scipts/lib/angular.js"></script>
+    <script>
+        angular.module("whatsNew",[])
+                .directive('noScope', function(){
+                    return{
+                        scope : false,
+                        template : '<h1>{{message}}</h1><h1>{{parentMessage}}</h1>',
+                        controller : function($scope){
+                            $scope.message = "Hi Scope message..!"
+                        }
+                    }
+                })
+                .directive('withScope', function(){
+                    return{
+                        scope : true,
+                        template : '<h1>{{message}}</h1><h1>{{parentMessage}}</h1>',
+                        controller : function($scope){
+                            $scope.message = "Hi Scope message..!"
+                        }
+                    }
+                })
+                .directive('isolatedScope', function(){
+                    return{
+                        scope : {
+                            message : '='
+                        },
+                        template : '<h1>{{message}}</h1><h1>{{parentMessage}}</h1>',
+                        controller : function($scope){
+                            //$scope.message = "Hi Scope message..!"
+                        }
+                    }
+                })
+                .controller('subController', function($scope){
+                    $scope.msg = 'isolated message..!';
+                })
+                .controller('appController',function($scope){
+                    $scope.message = "Hi Message";
+                    $scope.parentMessage = 'Hi parentMessage';
+                });
+    </script>
+</head>
+<body ng-app="whatsNew" ng-controller="appController">
+<input type="text" ng-model="message">
+<input type="text" ng-model="parentMessage">
+ <no-scope></no-scope>
+ <hr/>
+ <with-scope></with-scope>
+ <hr/>
+ <div ng-controller="subController">
+     <isolated-scope message="msg"></isolated-scope>
+ </div>
+<input type="text" ng-model="bindMessage">
+<span type="text" ng-bind="bindMessage"></span>
+</body>
+</html>

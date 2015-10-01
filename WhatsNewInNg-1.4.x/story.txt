@@ -1,0 +1,16 @@
+=> Started this version development in september of 2014
+=> released the stable version in May 2015
+=> Over 400 commit that has fixed more than 100 bugs, and added over 30 features
+=> Performance improvements
+=> Change in angular compilation process that saves time
+=> No more support for IE 8 . That has removed lot of code and that saves compilation time.
+    Size of the angular file has also reduced significantly.
+
+1) Animation related changes
+
+2) $cookies and $cookieStore
+    $cookieStore has depricated in 1.4
+    $cookie service nmore depends on clients browser. It has its own service and sets/gets values to it.
+
+
+http://angularjs.blogspot.in/search/label/announcements

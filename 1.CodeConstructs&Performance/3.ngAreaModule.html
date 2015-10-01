@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>What's new in ng-1.3</title>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script>
+        angular.module("whatsNew",[])
+                .controller('whatsNewController',['$scope', function($scope){
+                    $scope.showAdd = false;
+                    $scope.message = "Whats up?";
+                    $scope.messages = ['message1','message2','message3'];
+                    $scope.addMessage = function(msg){
+                        $scope.messages.push(msg);
+                    }
+                }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+<div ng-controller="whatsNewController">
+    <input type="checkbox" ng-model="showAdd"/>
+    <table class="table" ng-show="showAdd">
+        <tr>
+            <td><div> <input type="text" ng-model="message" /></div></td>
+            <td><input type="button" ng-click="addMessage(message)" value="Add Message"/> </td>
+        </tr>
+    </table>
+    <h2>Messages</h2>
+    <ul>
+        <li ng-repeat="msg in messages">
+            {{msg}}
+        </li>
+    </ul>
+    <div> No of messages  available : {{messages.length}}</div>
+</div>
+</body>
+</html>

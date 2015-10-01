@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>What's new in ng-1.3</title>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script>
+        angular.module("whatsNew",[])
+                .controller('whatsNewController',['$scope', function($scope){
+                    $scope.student = {};
+                    $scope.students = [];
+                    $scope.addStudent = function(student){
+                        $scope.students.push(student);
+                        $scope.student = {};
+                    }
+                }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+
+<div ng-controller="whatsNewController">
+    <div><h1>Add A student</h1>
+        <table>
+            <tr>
+                <td>
+                    <table class="table">
+                        <thead>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="align-content: flex-start">
+                                <span> Name :</span>
+                            </td>
+                            <td style="align-content: flex-start">
+                                <input type="text" ng-model="student.name" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="align-content: flex-start">
+                                <span> City :</span>
+                            </td>
+                            <td style="align-content: flex-start">
+                                <input type="text" ng-model="student.city" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="align-content: flex-start">
+                                <span> DOB :</span>
+                            </td>
+                            <td style="align-content: flex-start">
+                                <input type="date" ng-model="student.dob" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="align-content: flex-start">
+                                <span> Mail :</span>
+                            </td>
+                            <td style="align-content: flex-start">
+                                <input type="email" ng-model="student.email" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="align-content: center">
+                                <input type="button" class="btn-success" value="Add Student" ng-click="addStudent(student);">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td>
+                    <table class="table">
+                        <thead>
+                        <th>bind option</th>
+                        <th> sample</th>
+                        <th>value</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    ng-model-options = "{updateOn : 'blur'}"
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="mailBlur" ng-model-options="{updateOn : 'blur'}" />
+                                </td>
+                                <td>
+                                    {{mailBlur}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ng-model-options = "{debounce : 5000}"
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="mailDebounce" ng-model-options="{debounce : 5000}" />
+                                </td>
+                                <td>
+                                    {{mailDebounce}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    ng-model-options = "{debounce : {default : 500, 'blur' : 0}}"
+                                </td>
+                                <td>
+                                    <input type="text" ng-model="mailDebounceBlur" ng-model-options="{debounce : {default : 2000, 'blur' : 0}}" />
+                                </td>
+                                <td>
+                                    {{mailDebounceBlur}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <div></div>
+    </div>
+    <hr/>
+    <div>
+        <h1> Students List..!</h1>
+        <table class="table">
+            <thead>
+            <th>Name</th>
+            <th>City</th>
+            <th>Dob</th>
+            </thead>
+            <tr ng-repeat="student in students">
+                <td>{{student.name}}</td>
+                <td>{{student.city}}</td>
+                <td>{{student.dob}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>constant Expressions ng-true and ng-false</title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-route.js"></script>
+    <script>
+        var assets = [
+            {
+                _id : 10000001,
+                type : 'Fixed',
+                name : 'Land',
+                owner : 'AAAAAAA',
+                email : 'aa@gmail.com',
+                Cost : 950.25,
+                ownedDate : '2010-06-15T00:00:00Z',
+                location : 'Hyderabad',
+                verified : 'yes'
+            },
+            {
+                _id : 10000002,
+                type : 'Lease',
+                name : 'House',
+                owner : 'BBBBBB',
+                email : 'bb@gmail.com',
+                ownedDate : '2014-06-15T00:00:00Z',
+                Cost : 870.452,
+                location : 'Chennai',
+                verified : 'yes'
+            },
+            {
+                _id : 10000003,
+                type : 'Inherited',
+                name : 'Car',
+                owner : 'CCCCCC',
+                email : 'cc@gmail.com',
+                ownedDate : '2013-08-15T00:00:00Z',
+                Cost : 500.15,
+                location : 'Hyderabad',
+                verified : 'yes'
+            },
+            {
+                _id : 10000004,
+                type : 'Fixed',
+                name : 'Fields',
+                owner : 'DDDDDD',
+                email : 'DDDDDD@gmail.com',
+                ownedDate : '2011-07-15T00:00:00Z',
+                Cost : 1587.256,
+                location : 'Hyderabad',
+                verified : 'yes'
+            },
+            {
+                _id : 10000005,
+                type : 'Lease',
+                name : 'Horses',
+                owner : 'EEEEEE',
+                email : 'EEEEEE@gmail.com',
+                ownedDate : '2008-01-15T00:00:00Z',
+                Cost : 870.145,
+                location : 'Chennai',
+                verified : 'no'
+            },
+            {
+                _id : 10000006,
+                type : 'Inherited',
+                name : 'Cows',
+                owner : 'FFFFFF',
+                email : 'FFFFFF@gmail.com',
+                ownedDate : '2000-06-15T00:00:00Z',
+                Cost : 500.52,
+                location : 'Hyderabad',
+                verified : 'yes'
+            },
+            {
+                _id : 10000007,
+                type : 'Inherited',
+                name : 'Gold',
+                owner : 'GGGGGG',
+                email : 'FFFFFF@gmail.com',
+                ownedDate : '2015-06-15T00:00:00Z',
+                Cost : 1000,
+                location : 'Hyderabad',
+                verified : 'no'
+            }
+        ];
+        var mockAssetsApi = {
+            getAssetsData : function(cb){
+                setTimeout(function(){
+                    cb(assets);
+                })
+            }
+        };
+        angular.module("whatsNew",['ngRoute'])
+                .factory('assetsService' ,['$q',  function($q){
+                    var getAllAssets = function(cb){
+                        var promise = $q(function(resolve, reject){
+                            mockAssetsApi.getAssetsData(function(data){
+                                if(data)
+                                {
+                                    resolve(data)
+                                }
+                                else{
+                                    reject("No Data available");
+                                }
+                            });
+                        });
+                        return promise;
+                    };
+                    return {
+                        getAllAssets : getAllAssets
+                    }
+                }])
+                .controller('assetsController',['$scope','$location', '$routeParams','$rootScope','$anchorScroll', 'assetsService',
+                    function($scope, $location, $routeParams, $rootScope, $anchorScroll, assetsService){
+                        $scope.assets = [];
+
+                        var fetcheAssets = function(){
+                            assetsService.getAllAssets().then(function(data){
+                                $scope.assets = data;
+                            }, function(error){
+                                console.error(error);
+                            });
+                        };
+
+                        fetcheAssets();
+                    }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+
+<div ng-controller="assetsController">
+    <div>
+        <h1>Assets List</h1>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Owned Date</th>
+                <th>Cost in $</th>
+                <th>Verified</th>
+                <th>Edit An asset</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="asset in assets">
+                <td class="col-md-2"><div ng-bind="asset._id | limitTo : -1"></div> </td>
+                <td class="col-md-2"><div ng-bind="asset.name"></div> </td>
+                <td class="col-md-2"><div ng-bind="asset.owner"></div> </td>
+                <td class="col-md-2"><div ng-bind="asset.ownedDate | date : 'yyyy'"></div> </td>
+                <td class="col-md-2"><div ng-bind="asset.Cost | currency : '$' :1"></div> </td>
+                <td class="col-md-2"><input type="checkbox" ng-false-value="'no'"  ng-true-value="'yes'" ng-model="asset.verified">{{asset.verified}}</td>
+                <td class="col-md-2"><a href="#/assets/{{asset._id}}" ng-click="fitEditWindow()" class="btn-lg">Edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>$routeProvider.otherwise.override</title>
+    <base href="http://127.0.0.1:8080/"></base>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-route.js"></script>
+    <script>
+        angular.module("whatsNew",['ngRoute'])
+        .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
+            $routeProvider.when('/Home', {templateUrl : '../Controllers&Routing/home.html'})
+            .when('/About', {templateUrl : '../Controllers&Routing/about.html'})
+            .when('/Products', {templateUrl : '../Controllers&Routing/products.html'})
+            .otherwise('/Home');
+            $locationProvider.html5Mode(true);
+        }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+
+<div class="container">
+    <div class="row">
+    <div class="col-md-3">
+        <ul class="nav">
+            <li><a href="Home"> Home </a></li>
+            <li><a href="About"> About </a></li>
+            <li><a href="Products"> Products </a></li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <div ng-view></div>
+    </div>
+    </div>
+</div>   
+</div>   
+</div>
+</body>
+</html>

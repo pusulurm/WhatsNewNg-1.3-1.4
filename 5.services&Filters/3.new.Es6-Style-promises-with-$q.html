@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>new.Es6-Style-promises-with-$q</title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-route.js"></script>
+    <script>
+        var assets = [
+            {
+                _id : 1,
+                type : 'Fixed',
+                name : 'Land',
+                owner : 'AAAAAAA',
+                email : 'aa@gmail.com',
+                Cost : 500000,
+                location : 'Hyderabad'
+            },
+            {
+                _id : 2,
+                type : 'Lease',
+                name : 'House',
+                owner : 'BBBBBB',
+                email : 'bb@gmail.com',
+                Cost : 8700000,
+                location : 'Chennai'
+            },
+            {
+                _id : 3,
+                type : 'Inherited',
+                name : 'Car',
+                owner : 'CCCCCC',
+                email : 'cc@gmail.com',
+                Cost : 50000,
+                location : 'Hyderabad'
+            },
+            {
+                _id : 4,
+                type : 'Fixed',
+                name : 'Fields',
+                owner : 'DDDDDD',
+                email : 'DDDDDD@gmail.com',
+                Cost : 500000,
+                location : 'Hyderabad'
+            },
+            {
+                _id : 5,
+                type : 'Lease',
+                name : 'Horses',
+                owner : 'EEEEEE',
+                email : 'EEEEEE@gmail.com',
+                Cost : 8700000,
+                location : 'Chennai'
+            },
+            {
+                _id : 6,
+                type : 'Inherited',
+                name : 'Cows',
+                owner : 'FFFFFF',
+                email : 'FFFFFF@gmail.com',
+                Cost : 50000,
+                location : 'Hyderabad'
+            },
+            {
+                _id : 7,
+                type : 'Inherited',
+                name : 'Gold',
+                owner : 'GGGGGG',
+                email : 'FFFFFF@gmail.com',
+                Cost : 50800,
+                location : 'Hyderabad'
+            }
+        ];
+        var mockAssetsApi = {
+            getAssetsData : function(cb){
+                setTimeout(function(){
+                    cb(assets);
+                }, 5000)
+            }
+        };
+        angular.module("whatsNew",['ngRoute'])
+                .factory('assetsService' ,['$q',  function($q){
+                    var getAllAssets = function(cb){
+                        var promise = $q(function(resolve, reject){
+                            mockAssetsApi.getAssetsData(function(data){
+                                if(data)
+                                {
+                                    resolve(data)
+                                }
+                                else{
+                                    reject("No Data available");
+                                }
+                            });
+                        });
+                        return promise;
+                    };
+                    return {
+                        getAllAssets : getAllAssets
+                    }
+                }])
+                .controller('assetsController',['$scope','$location', '$routeParams','$rootScope','$anchorScroll', 'assetsService',
+                    function($scope, $location, $routeParams, $rootScope, $anchorScroll, assetsService){
+                        $scope.assets = [];
+
+                        var fetcheAssets = function(){
+                            assetsService.getAllAssets().then(function(data){
+                                $scope.assets = data;
+                            }, function(error){
+                                console.error(error);
+                            });
+                        };
+
+                        fetcheAssets();
+                    }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+
+<div ng-controller="assetsController">
+    <div>
+        <h1>Assets List</h1>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Edit An asset</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="asset in assets">
+                <td class="col-md-2"><div ng-bind="asset._id"></div> </td>
+                <td class="col-md-4"><div ng-bind="asset.name"></div> </td>
+                <td class="col-md-4"><div ng-bind="asset.owner"></div> </td>
+                <td class="col-md-2"><a href="#/assets/{{asset._id}}" ng-click="fitEditWindow()" class="btn-lg">Edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

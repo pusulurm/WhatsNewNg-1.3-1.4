@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>bindToController</title>
+    <!--<script type="text/javascript" src="../scipts/lib/angular1.2.js"></script>-->
+    <script type="text/javascript" src="../scipts/lib/angular1.4.2.js"></script>
+    <script>
+        angular.module('testModule',[])
+                .directive('myMessage1.4', function(){
+                    return {
+                        restrict : 'E',
+                        scope : {},
+                        controller : function(){
+                            this.dirMessage = 'This message is from directive controller 1.4...!'
+                        },
+                        controllerAs : 'bindDirCtrl',
+                        bindToController : {
+                            message : '='
+                        },
+                        template : '<div><h1>{{bindDirCtrl.dirMessage}}</h1><h3>{{bindDirCtrl.message}}</h3></div>'
+                    }
+                })
+                .directive('myMessage1.3', function(){
+                    return {
+                        restrict : 'E',
+                        scope : {
+                            message : '='
+                        },
+                        controller : function(){
+                            this.dirMessage = 'This message is from directive controller 1.3...!'
+                        },
+                        controllerAs : 'bindDirCtrl',
+                        bindToController : true,
+                        template : '<div><h1>{{bindDirCtrl.dirMessage}}</h1><h3>{{bindDirCtrl.message}}</h3></div>'
+                    }
+                })
+                .directive('myMessage1.2', function(){
+                    return {
+                        restrict: 'E',
+                        scope : {
+                            message : '='
+                        },
+                        controllerAs : 'dirCtrl',
+                        template : '<div><h1>{{dirCtrl.message}}</h1><h3>{{dirCtrl.dirMessage}}</h3></div>',
+                        controller : function($scope){
+                            this.dirMessage = 'Hi There from directive controller 1.2..!';
+                            this.message = 'Hi';
+                            $scope.$watch('message', function(newVal, oldVal){
+                                this.message = newVal;
+                            }.bind(this));
+                        }
+                    }
+                })
+                .controller('appController', function($scope){
+                    $scope.ctrlMessage = 'This message is from app controller 1.2..!';
+                })
+                .controller('bindToAppController', function($scope){
+                    $scope.ctrlmessage = 'This message is from bindToAppController 1.3..!';
+                })
+                .controller('appController14', function($scope){
+                    $scope.message = 'This message is from app controller 1.4...!'
+                })
+    </script>
+</head>
+<body ng-app="testModule">
+    <div ng-controller="appController">
+        <my-message1.2 message="ctrlMessage">
+        </my-message1.2>
+    </div>
+    <hr/>
+    <div ng-controller="bindToAppController">
+        <my-message1.3 message="ctrlmessage">
+        </my-message1.3>
+    </div>
+    <hr/>
+    <div ng-controller="appController14">
+        <my-message1.4 message="message">
+        </my-message1.4>
+    </div>
+</body>
+</html>

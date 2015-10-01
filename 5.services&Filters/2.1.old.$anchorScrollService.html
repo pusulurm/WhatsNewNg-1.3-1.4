@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>old anchorScroll</title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular-1.3.1.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-route-1.3.1.js"></script>
+    <script>
+        angular.module("whatsNew",['ngRoute'])
+                .config(['$routeProvider', function($routeProvider){
+                    $routeProvider.when('/assets' , {
+                        templateUrl : 'assets.html'
+                    })
+                    .when('/assets/:assetId' , {
+                        templateUrl : 'assetDetails.html',
+                        controller : 'assetsController'})
+                    .otherwise({redirectTo : '/assets'})
+                }])
+                .factory('assetsService' , function(){
+                    var assets = [
+                        {
+                            _id : 1,
+                            type : 'Fixed',
+                            name : 'Land',
+                            owner : 'AAAAAAA',
+                            email : 'aa@gmail.com',
+                            Cost : 500000,
+                            location : 'Hyderabad'
+                        },
+                        {
+                            _id : 2,
+                            type : 'Lease',
+                            name : 'House',
+                            owner : 'BBBBBB',
+                            email : 'bb@gmail.com',
+                            Cost : 8700000,
+                            location : 'Chennai'
+                        },
+                        {
+                            _id : 3,
+                            type : 'Inherited',
+                            name : 'Car',
+                            owner : 'CCCCCC',
+                            email : 'cc@gmail.com',
+                            Cost : 50000,
+                            location : 'Hyderabad'
+                        },
+                        {
+                            _id : 4,
+                            type : 'Fixed',
+                            name : 'Fields',
+                            owner : 'DDDDDD',
+                            email : 'DDDDDD@gmail.com',
+                            Cost : 500000,
+                            location : 'Hyderabad'
+                        },
+                        {
+                            _id : 5,
+                            type : 'Lease',
+                            name : 'Horses',
+                            owner : 'EEEEEE',
+                            email : 'EEEEEE@gmail.com',
+                            Cost : 8700000,
+                            location : 'Chennai'
+                        },
+                        {
+                            _id : 6,
+                            type : 'Inherited',
+                            name : 'Cows',
+                            owner : 'FFFFFF',
+                            email : 'FFFFFF@gmail.com',
+                            Cost : 50000,
+                            location : 'Hyderabad'
+                        },
+                        {
+                            _id : 7,
+                            type : 'Inherited',
+                            name : 'Gold',
+                            owner : 'GGGGGG',
+                            email : 'FFFFFF@gmail.com',
+                            Cost : 50800,
+                            location : 'Hyderabad'
+                        }
+                    ];
+                    var getAllAssets = function(){
+                        return assets;
+                    };
+                    var updateAnAsset = function(modifiedAsset){
+                        var index = _.findIndex(assets , function(asset){return asset._id == modifiedAsset._id});
+                        assets[index] = modifiedAsset ;
+                    };
+                    return {
+                        getAllAssets : getAllAssets,
+                        updateAnAsset : updateAnAsset
+                    }
+                })
+                .controller('assetsController',['$scope','$location', '$routeParams','$rootScope', 'assetsService',
+                    function($scope, $location, $routeParams, $rootScope, assetsService){
+                        $scope.assets = [];
+                        $scope.currentAsset = {};
+
+                        var updateAssets = function(){
+                            $scope.assets = assetsService.getAllAssets();
+                        };
+
+                        updateAssets();
+
+//                        if($routeParams.assetId && parseInt($routeParams.assetId) > 0){
+//                            var currentAsset = _.find($scope.assets ,
+//                                    function(asset) {
+//                                        return asset._id == $routeParams.assetId;
+//                                    });
+//                            $scope.currentAsset = jQuery.extend({} , currentAsset);
+//                        }
+                        $scope.saveCurrentAsset = function(){
+                            assetsService.updateAnAsset($scope.currentAsset);
+                            $scope.clearCurrentAsset();
+                            updateAssets();
+                            $location.path('/assets');
+                        };
+
+                        $scope.clearCurrentAsset = function(){
+                            $scope.currentAsset = {};
+                        };
+
+                        $scope.closeEditWindow = function(){
+                            $scope.clearCurrentAsset();
+                            $location.path('/assets');
+                        };
+                    }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+<script type="text/ng-template" id="assets.html">
+
+</script>
+<script type="text/ng-template" id="assetDetails.html">
+    <form name="frm_EditAsset" ng-submit="saveCurrentAsset()" novalidate>
+        <div class="span8" id="myModal" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" ng-click="closeEditWindow()">&times;</button>
+                        <h3 class="modal-title">Edit Asset</h3>
+                    </div>
+                    <div class="modal-body" ng-class >
+                        <div>
+                            <div class="form-group" ng-class="{'has-error' : frm_EditAsset.assertType.$invalid && frm_EditAsset.assertType.$dirty }">
+                                <div class="span2">Type : </div>
+                                <select class="form-control input-lg" ng-model="currentAsset.type" name="assertType" required>
+                                    <option></option>
+                                    <option>Fixed</option>
+                                    <option>Lease</option>
+                                    <option>Inherited</option>
+                                </select>
+                                <span class="help-block has-error" ng-if="frm_EditAsset.assertType.$dirty">
+                                    <span ng-show="frm_EditAsset.assertType.$error.required">
+                                        Asset type can not be empty..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_EditAsset.assetName.$invalid && frm_EditAsset.assertType.$dirty }">
+                                <span class="span2">Name : </span>
+                                <input class="form-control input-lg" name="assetName" type="text" ng-model="currentAsset.name" required ng-minlength="2" ng-maxlength="15"/>
+                                <span class="help-block has-error" ng-if="frm_EditAsset.assetName.$dirty">
+                                    <span ng-show="frm_EditAsset.assetName.$error.required">
+                                        Asset name can not be empty..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetName.$error.minlength">
+                                        Asset name can should be minimum of 2 characters..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetName.$error.maxlength">
+                                        Asset name can not be more than 15 characters..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_EditAsset.assetOwner.$invalid && frm_EditAsset.assetOwner.$dirty }">
+                                <span class="span2">Owner : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.owner" required name="assetOwner" ng-minlength="5" ng-maxlength="20"/>
+                                <span class="help-block has-error" ng-if="frm_EditAsset.assetOwner.$dirty">
+                                    <span ng-show="frm_EditAsset.assetOwner.$error.required">
+                                        Asset owner name can not be empty..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetOwner.$error.minlength">
+                                        Asset owner name can should be minimum of 5 characters..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetOwner.$error.maxlength">
+                                        Asset owner name can not be more than 20 characters..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_EditAsset.assetOwnerEmail.$invalid && frm_EditAsset.assetOwnerEmail.$dirty }">
+                                <span class="span2">E-mail : </span>
+                                <input class="form-control input-lg" type="email" ng-model="currentAsset.email" required name="assetOwnerEmail"/>
+                                <span class="help-block has-error" ng-if="frm_EditAsset.assetOwnerEmail.$dirty">
+                                    <span ng-show="frm_EditAsset.assetOwnerEmail.$error.required">
+                                        Owner's E-mail can not be empty..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetOwnerEmail.$error.email">
+                                        Owner's E-mail should be in valid format..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_EditAsset.assetCost.$invalid && frm_EditAsset.assetCost.$dirty }">
+                                <span class="span2">Cost in Rs : </span>
+                                <input class="form-control input-lg" type="number" ng-model="currentAsset.Cost" required name="assetCost" min="100" max="10000000"/>
+                                <span class="help-block has-error" ng-if="frm_EditAsset.assetCost.$dirty">
+                                    <span ng-show="frm_EditAsset.assetCost.$error.required">
+                                        Asset cost can not be empty..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetCost.$error.min">
+                                        Asset cost can't be less than 100 ..!
+                                    </span>
+                                    <span ng-show="frm_EditAsset.assetCost.$error.max">
+                                        Asset cost can't be more than one C ..!
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error' : frm_EditAsset.assetLocation.$invalid && frm_EditAsset.assetLocation.$dirty }">
+                                <span class="span2">Location : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.location" required name="assetLocation"/>
+                                <span class="help-block has-error" ng-if="frm_EditAsset.assetLocation.$dirty">
+                                    <span ng-show="frm_EditAsset.assetLocation.$error.required">
+                                        Asset location can not be empty..!
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-success"/>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeEditWindow()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<div ng-controller="assetsController">
+    <div>
+        <h1>Assets List</h1>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Edit An asset</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="asset in assets">
+                <td class="col-md-2"><div ng-bind="asset._id"></div> </td>
+                <td class="col-md-4"><div ng-bind="asset.name"></div> </td>
+                <td class="col-md-4"><div ng-bind="asset.owner"></div> </td>
+                <td class="col-md-2"><a href="#/assets/{{asset._id}}" class="btn-lg">Edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div ng-view="">
+
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+1. ngAre
+2. ng-model-options = "{updateOn : {default : 500,'blur' : 0}}"
+3. Rollback form level, not saving form values when submit clicked
+4. Bindings to getter/setter function
+5. ReUsing Validation messages
+
+
+C:\Murali\Stash\persional\WhatsNewNg-1.3>live-server --port=8082 --entry-file="5
+.services&Filters\1.1.old.$templateRequest.Service.html"
+
+live-server --entry-file="Controllers&Routing\1.1.index-WithoutHTML5Routing.html"

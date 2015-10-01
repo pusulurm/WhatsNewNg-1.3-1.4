@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Default restriction</title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script type="text/javascript" src="../scipts/lib/angular-route.js"></script>
+
+</head>
+<body ng-app="mainModule">
+<script>
+    angular.module("mainModule",[])
+            .directive('myDirective', function(){
+                return{
+                    scope : {},
+                    template : '<h1>This message is from my-Directive</h1>'
+                }
+
+            })
+</script>
+<my-directive></my-directive>
+<div my-directive>
+
+</div>
+</body>
+</html>

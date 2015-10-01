@@ -1,0 +1,33 @@
+===================
+3.FormsValidations
+===================
+live-server --entry-file="3.FormsValidations\1.HTML5ValidationImprovements.html"
+live-server --entry-file="3.FormsValidations\2.ng-Messages-DisplayMessages.html"
+
+
+live-server --entry-file="3.FormsValidations\3.ng-messages-include-ReuseMessages.html"
+live-server --entry-file="3.FormsValidations\4.touchedDetection.html"
+live-server --entry-file="3.FormsValidations\5.DynamicElementsBinding.html"
+live-server --entry-file="3.FormsValidations\2.ng-Messages-DisplayMessages.html"
+
+===================
+Controllers&Routing
+===================
+live-server --entry-file="Controllers&Routing\1.1.index-WithoutHTML5Routing.html"
+live-server --entry-file="Controllers&Routing\1.WithHTML5Routing.html"
+live-server --entry-file="Controllers&Routing\2.$route.updateParams.html"
+live-server --entry-file="Controllers&Routing\3.$routeProvider.Otherwise.Overloaded.html"
+live-server --entry-file="Controllers&Routing\4.Cacncelling-$routeChangeState.html"
+live-server --entry-file="Controllers&Routing\5.$WatchGroup.html"
+live-server --entry-file="Controllers&Routing\6.$routeProvider.CaseInsensitive.html"
+18513
+===================
+5.services&Filters
+===================
+live-server --entry-file="5.services&Filters\1.1.old.$templateRequest.Service.html"
+live-server --entry-file="5.services&Filters\1.new.$templateRequest.Service.html"
+live-server --entry-file="5.services&Filters\2.1.old.$anchorScrollService.html"
+live-server --entry-file="5.services&Filters\2.new.$anchorScrollService.html"
+live-server --entry-file="5.services&Filters\3.1.old.Es6-Style-promises-with-$q.html"
+live-server --entry-file="5.services&Filters\3.new.Es6-Style-promises-with-$q.html"
+live-server --entry-file="5.services&Filters\4.newFilters.html"

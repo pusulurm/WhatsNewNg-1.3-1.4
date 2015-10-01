@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../scipts/lib/underscore.js"></script>
+    <script type="text/javascript" src="../scipts/lib/jquery.js"></script>
+    <script type="text/javascript" src="../scipts/lib/bootstrap.js"></script>
+    <link type="text/css" rel="stylesheet" href="../scipts/lib/bootstrap.css" />
+    <script type="text/javascript" src="../scipts/lib/angular.js"></script>
+    <script>
+        angular.module("whatsNew",[])
+                .controller('assetsController',['$scope', function($scope){
+                    $scope.assets = [
+                        {
+                            _id : 1,
+                            type : 'Fixed',
+                            name : 'Land',
+                            owner : 'AAAA',
+                            Cost : 500000,
+                            location : 'Hyderabad'
+                        },
+                        {
+                            _id : 2,
+                            type : 'Lease',
+                            name : 'House',
+                            owner : 'BBBB',
+                            Cost : 8700000,
+                            location : 'Chennai'
+                        },
+                        {
+                            _id : 3,
+                            type : 'Inherited',
+                            name : 'Car',
+                            owner : 'CCCC',
+                            Cost : 50000,
+                            location : 'Hyderabad'
+                        }
+                    ];
+                    $scope.currentAsset = {};
+
+                    $scope.saveThisAsset = function(){
+                        clearCurrentAsset();
+                    };
+
+                    $scope.clearCurrentAsset = function(){
+                        $scope.currentAsset = {};
+                    };
+
+                    $scope.showEditAssetScreen = function(assetId){
+                        $scope.currentAsset = _.find($scope.assets, function(asset){return asset._id == assetId});
+                    };
+
+                    $scope.updateAnAsset = function(assetId){
+                    };
+
+                    $scope.handleRollback = function(control, event){
+                        if(event.keyCode == 27){
+                            control.$rollbackViewValue();
+                        }
+                    }
+                }]);
+    </script>
+</head>
+<body ng-app="whatsNew">
+<div ng-controller="assetsController">
+    <h3>Rollback on escape</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Cost in Rs</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="asset in assets">
+            <td><div ng-bind="asset.type"></div> </td>
+            <td><div ng-bind="asset.name"></div> </td>
+            <td><div ng-bind="asset.owner"></div> </td>
+            <td><div ng-bind="asset.Cost"></div> </td>
+            <td><div ng-bind="asset.location"></div> </td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="settingsMenu"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <img src="../assets/images/settings.gif">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="settingsMenu">
+                        <li><a style="cursor: pointer" data-toggle="modal" data-target="#myModal" ng-click="showEditAssetScreen(asset._id)">Edit</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="modal fade span8" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Update Asset</h3>
+                </div>
+                <form name="frm_updateAsset">
+                    <div class="modal-body">
+                        <div>
+                            <div>
+                                <div class="span2">Type : </div>
+                                <select class="form-control input-lg" ng-model="currentAsset.type" name="assertType"
+                                        ng-model-options="{updateOn : 'blur'}" required ng-keyup="handleRollback(frm_updateAsset.assertType, $event);">
+                                    <option>Fixed</option>
+                                    <option>Lease</option>
+                                    <option>Inherited</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="span2">Name : </span>
+                                <input class="form-control input-lg" name="assetName" id="assetName" type="text" ng-model="currentAsset.name"
+                                       ng-model-options="{updateOn : 'blur'}" required ng-keyup="handleRollback(frm_updateAsset.assetName, $event);"/>
+                            </div>
+                            <div>
+                                <span class="span2">Owner : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.owner" required name="assetOwner"
+                                       ng-model-options="{updateOn : 'blur'}" required ng-keyup="handleRollback(frm_updateAsset.assetOwner, $event);"/>
+                            </div>
+                            <div>
+                                <span class="span2">Cost in Rs : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.Cost" required name="assetCost"
+                                       ng-model-options="{updateOn : 'blur'}" required ng-keyup="handleRollback(frm_updateAsset.assetCost, $event);"/>
+                            </div>
+                            <div>
+                                <span class="span2">Location : </span>
+                                <input class="form-control input-lg" type="text" ng-model="currentAsset.location" required name="assetLocation"
+                                       ng-model-options="{updateOn : 'blur'}" required ng-keyup="handleRollback(frm_updateAsset.assetLocation, $event);"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="frm_updateAsset.$rollbackViewValue()">Reset</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="saveThisAsset(currentAsset)">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearCurrentAsset()">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
